@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:PublicTransport"
+             NavigationPage.HasNavigationBar="false"
+             xmlns:mymap="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             mc:Ignorable="d"
+             x:Name="TheMap"
+             Title="Map"
+             x:Class="PublicTransport.PageMap">
+
+    <AbsoluteLayout HeightRequest="200">
+        <local:CustomMap
+                x:Name="Maps"
+               MapType="Street"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="FillAndExpand"
+               HasZoomEnabled="True"
+               AbsoluteLayout.LayoutFlags="SizeProportional"
+               AbsoluteLayout.LayoutBounds="1,1,1,1" >
+        </local:CustomMap>
+        <Frame BackgroundColor="Black" CornerRadius="30" Scale="0.7" AbsoluteLayout.LayoutFlags="PositionProportional"
+               AbsoluteLayout.LayoutBounds="0,0,-1,-1">
+            <Image Source="back.png" Aspect="AspectFill"/>
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer x:Name="FloatMenuItemTap2" Tapped="FloatMenuItemTap_OnTapped1" />
+            </Frame.GestureRecognizers>
+        </Frame>
+        
+    </AbsoluteLayout>
+</ContentPage>

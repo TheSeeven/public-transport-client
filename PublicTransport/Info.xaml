@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             NavigationPage.HasNavigationBar="false"
+             BackgroundImageSource="App.jpg"
+             Title="INFO"
+             x:Class="PublicTransport.Info">
+    <ContentPage.Content>
+        <AbsoluteLayout HeightRequest="200">
+            <Label VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="Center"
+               AbsoluteLayout.LayoutFlags="SizeProportional"
+               AbsoluteLayout.LayoutBounds="1,1,1,1"
+                   FontSize="Medium"
+                   TextColor="Black"
+                   Margin="10,0">
+                <Label.Text>
+                    About app:
+                    
+Aplicația va afișa pe hartă locația vehiculelor active în timp real, iar pe stații va afișa atât timpul de așteptare pentru vehiculul selectat cât și pentru alte vehicule care au ca destinație stația respectivă.
+În momentul în care la timpul afișat indică "Indisponibil", vehiculul are o problema pe traseu, perioada de așteptare neputând fi calculată. 
+                    
+                    
+Versiune:
+1.0.0
+                </Label.Text>
+            </Label> 
+               
+            <Frame BackgroundColor="Black" CornerRadius="30" Scale="0.7" AbsoluteLayout.LayoutFlags="PositionProportional"
+               AbsoluteLayout.LayoutBounds="0,0,-1,-1">
+                    <Image Source="back.png" Aspect="AspectFill"/>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="FloatMenuItemTap" Tapped="FloatMenuItemTap_OnTapped" />
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

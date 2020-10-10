@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="false"
+             BackgroundImageSource="App.jpg"
+             x:Class="PublicTransport.Search">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <StackLayout AbsoluteLayout.LayoutFlags="SizeProportional"
+               AbsoluteLayout.LayoutBounds="1,1,1,1">
+                <SearchBar x:Name="Searching" Placeholder="Station Name" PlaceholderColor="LightGray" SearchButtonPressed="SearchBar_SearchButtonPressed" VerticalOptions="Start"/>
+                <ListView x:Name="StationResults" IsVisible="false" ItemTapped="Station_ItemTapped" HasUnevenRows="True" SelectionMode="None" Margin="5" SeparatorVisibility="None" HorizontalOptions="Center" VerticalOptions="Start"> 
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid HorizontalOptions="Center"
+                                    VerticalOptions="Center">
+                                <Frame HeightRequest="10" WidthRequest="250" CornerRadius="40" Margin="5" BackgroundColor="#594476A8" />
+                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontAttributes="Bold" FontSize="27" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="Center" TextColor="#000000" Margin="3" />
+                            </Grid>
+                        </ViewCell>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                </ListView>
+                <ListView x:Name="VehicleResults" IsVisible="false" ItemTapped="Vehicle_ItemTapped" HasUnevenRows="True" SelectionMode="None" Margin="5" SeparatorVisibility="None" HorizontalOptions="Center" VerticalOptions="Start">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid HorizontalOptions="Center"
+                                    VerticalOptions="Center">
+                                    <Frame HeightRequest="10" WidthRequest="250" CornerRadius="40" Margin="5" BackgroundColor="#594476A8" />
+                                    <Label Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontAttributes="Bold" FontSize="27" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="Center" TextColor="#000000" Margin="3" />
+                                </Grid>
+                            </ViewCell>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Label x:Name="Error" Text="No results found" VerticalOptions="End" FontSize="22" TextColor="Red" HorizontalOptions="Center"  IsVisible="False"/>
+            </StackLayout>
+            <Frame BackgroundColor="#5954A3BF" CornerRadius="30" Scale="0.7" HorizontalOptions="End" VerticalOptions="End" AbsoluteLayout.LayoutBounds="1,1,-1,-1"
+              AbsoluteLayout.LayoutFlags="PositionProportional">
+                <Image Source="back.png" Aspect="AspectFill"/>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer x:Name="FloatMenuItemTap" Tapped="FloatMenuItemTap_OnTapped" />
+                </Frame.GestureRecognizers>
+            </Frame>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="false"
+             BackgroundImageSource="App.jpg"
+             x:Class="PublicTransport.MenuPage">
+    <ContentPage.Content>
+        <AbsoluteLayout>
+            <StackLayout AbsoluteLayout.LayoutFlags="SizeProportional"
+               AbsoluteLayout.LayoutBounds="1,1,1,1">
+            <StackLayout>
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Vehicle_tap"/>
+            </StackLayout.GestureRecognizers>
+            <Grid HorizontalOptions="Center" VerticalOptions="Start">
+                <Frame HeightRequest="10" WidthRequest="250" CornerRadius="40" Margin="5" BackgroundColor="#594476A8" />
+                <Label Text="Vehicle" FontAttributes="Bold" FontSize="27" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="Center" TextColor="#000000" Margin="3" />
+            </Grid>
+            </StackLayout>
+            <StackLayout>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Search_tap"/>
+                </StackLayout.GestureRecognizers>
+                <Grid HorizontalOptions="Center" VerticalOptions="Start">
+                    <Frame HeightRequest="10" WidthRequest="250" CornerRadius="40" Margin="5" BackgroundColor="#594476A8" />
+                    <Label Text="Search station" FontAttributes="Bold" FontSize="27" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="Center" TextColor="#000000" Margin="3" />
+                </Grid>
+            </StackLayout>
+            <StackLayout>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Info_tap"/>
+                </StackLayout.GestureRecognizers>
+                <Grid HorizontalOptions="Center" VerticalOptions="Start">
+                    <Frame HeightRequest="10" WidthRequest="250" CornerRadius="40" Margin="5" BackgroundColor="#594476A8" />
+                    <Label Text="About" FontAttributes="Bold" FontSize="27" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="Center" TextColor="#000000" Margin="3" />
+                </Grid>
+            </StackLayout>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" x:Name="FloatMenuItem2" AbsoluteLayout.LayoutBounds="1,1,-1,-1"
+              AbsoluteLayout.LayoutFlags="PositionProportional" >
+                <Label Text="Eco" VerticalOptions="Center" HorizontalOptions="Start" FontSize="20" FontAttributes="Bold"/>
+                <Frame BackgroundColor="#323232" CornerRadius="30" x:Name="FrameEco" Scale="0.8" >
+                <Image Source="eco.png" Aspect="AspectFill"/>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer x:Name="FloatMenuItem2Tap" Tapped="FloatMenuItem2Tap_OnTapped" />
+                </Frame.GestureRecognizers>
+            </Frame>
+            
+            </StackLayout>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>
