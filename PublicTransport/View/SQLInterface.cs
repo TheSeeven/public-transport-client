@@ -6,25 +6,54 @@ using System.Threading;
 using System.Threading.Tasks;
 using PublicTransport;
 using Xamarin.Forms.Maps;
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
 
 namespace client_data_functions
 {
-    interface IExecuteQuerry
-    {
-        [Get("execute_querry/{q}")]
-        Task<string> GetResult([Path] string q);
-    }
+
     public class SQLInterface
     {
-        
-        private static readonly IExecuteQuerry client = RestClient.For<IExecuteQuerry>("http://192.168.1.110:3301");
-        private static void Execute_querry(string querry, ref string dest) // Executes a querry and assigns the result for a given querry (querry is self made) proc_name[arguments_list, sep=;] to ref variable 
+        public static string Execute_querry(string q)
         {
-            try
-            {dest = client.GetResult(querry).Result;}
-            catch
-            {Execute_querry(querry, ref dest);}
+            int size_i = 1;
+            string size = "";
+            string rez;
+            bool got_size = false;
+            byte[] bytes = new byte[size_i];
+
+            Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint ip = new IPEndPoint(IPAddress.Parse("192.168.1.110"), 3301);
+            client.Connect(ip);
+            client.Send(System.Text.Encoding.ASCII.GetBytes(q.Length+":"+q));
+
+            while (true)
+            {
+                client.Receive(bytes);
+                rez = Encoding.ASCII.GetString(bytes, 0, size_i);
+                if (!got_size)
+                {
+                    try
+                    {
+                        Convert.ToInt32(rez);
+                        size += rez;
+                        continue;
+                    }
+                    catch
+                    {
+                        size_i = Convert.ToInt32(size);
+                        got_size = true;
+                        bytes = new byte[size_i];
+                        continue;
+                    }
+                }
+                client.Close();
+                break;
+            }
+            return rez;
         }
+
         private static List<List<string>> Parse_MSG(string MSG) // Transform the string into a matrix of string of data
         {
             List<List<string>> rez = new List<List<string>>();
@@ -72,8 +101,7 @@ namespace client_data_functions
         private static ObservableCollection<List<object>> Path_table(uint station_id) // Returns a table of data used for calculating the arrival time for vehicles inside the same table.
         {
             ObservableCollection<List<object>> rez = new ObservableCollection<List<object>>();
-            string data_string = "";
-            Execute_querry($"time_table[{station_id}]", ref data_string);
+            string data_string = Execute_querry($"time_table[{station_id}]");
             List<List<string>> data = new List<List<string>>(Parse_MSG(data_string));
             foreach (List<string> row in data)
             {
@@ -110,8 +138,7 @@ namespace client_data_functions
 
             static int get_nr_stations(string vehicle)
             {
-                string data_string = "";
-                Execute_querry($"get_station_nr[{vehicle}]",ref data_string);
+                string data_string = Execute_querry($"get_station_nr[{vehicle}]");
                 return Convert.ToInt32(Parse_MSG(data_string));
             }
 
@@ -192,8 +219,8 @@ namespace client_data_functions
         {
             ObservableCollection<List<object>> rez = new ObservableCollection<List<object>>();
 
-            string data_string = "";
-            Execute_querry($"stations[{vehicle_name}]", ref data_string);
+            string data_string = Execute_querry($"stations[{vehicle_name}]");
+
             List<List<string>> data = new List<List<string>>(Parse_MSG(data_string));
             foreach (List<string> row in data)
             {
@@ -208,8 +235,8 @@ namespace client_data_functions
         public static ObservableCollection<List<object>> Get_Vehicle_location(string vehicle_name) // Return all coordinates for a specific vehicle name.
         {
             ObservableCollection<List<object>> vehicles = new ObservableCollection<List<object>>();
-            string data_string = "";
-            Execute_querry($"specific_vehicle[{vehicle_name}]",ref data_string);
+            string data_string = Execute_querry($"specific_vehicle[{vehicle_name}]");
+
             List<List<string>> data = new List<List<string>>(Parse_MSG(data_string));
             foreach (List<string> row in data)
             {
@@ -223,8 +250,8 @@ namespace client_data_functions
         public static ObservableCollection<List<string>> Get_Search_results(string station_name) {
             if(station_name.Length > 2) {
                 ObservableCollection<List<string>> vehicles = new ObservableCollection<List<string>>();
-                string data_string = "";
-                Execute_querry($"get_vehicles_from_station[{station_name}]", ref data_string);
+                string data_string = Execute_querry($"get_vehicles_from_station[{station_name}]");
+
                 List<List<string>> data = new List<List<string>>(Parse_MSG(data_string));
                 if(data[0][0] != "") {
                     foreach (List<string> row in data)
@@ -240,8 +267,7 @@ namespace client_data_functions
         public static ObservableCollection<List<string>> Get_Vehicle_list() // Returns all unique vehicle names.
         {
             ObservableCollection<List<string>> vehicles = new ObservableCollection<List<string>>();
-            string data_string = "";
-            Execute_querry("view_vehicles_client[]", ref data_string);
+            string data_string = Execute_querry("view_vehicles_client[]");
             List<List<string>> data = new List<List<string>>(Parse_MSG(data_string));
             foreach (List<string> row in data)
             {
@@ -252,8 +278,7 @@ namespace client_data_functions
         public static ObservableCollection<List<string>> Get_Type_list()
         {
             ObservableCollection<List<string>> res = new ObservableCollection<List<string>>();
-            string data_string = "";
-            Execute_querry("get_types[]", ref data_string);
+            string data_string = Execute_querry("get_types[]");
             List<List<string>> data = new List<List<string>>(Parse_MSG(data_string));
             foreach(List<string> row in data)
             {
@@ -263,8 +288,7 @@ namespace client_data_functions
         } // Returns all types
         public static void Get_all_stations() // Returns all stations from DB
         {
-            string data_string = "";
-            Execute_querry("all_stations[]", ref data_string);
+            string data_string = Execute_querry("all_stations[]");
             List<List<string>> data = Parse_MSG(data_string);
             ObservableCollection<List<string>> temp = new ObservableCollection<List<string>>();
             foreach (List<string> row in data)
@@ -311,8 +335,7 @@ namespace client_data_functions
             {
                 if (Globals.updateServerTime)
                 {
-                    string data_string = "";
-                    Execute_querry("get_current_time[]", ref data_string);
+                    string data_string = Execute_querry("get_current_time[]");
                     Globals.serverTime = Convert.ToDateTime(Parse_MSG(data_string)[0][0]);
                 }
                 Thread.Sleep(8000);
